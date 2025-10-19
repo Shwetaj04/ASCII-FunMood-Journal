@@ -1,5 +1,6 @@
 Flask==2.3.3
-Flask-Cors==3.1.2
+Flask-CORS==3.1.1
 Pillow==9.5.0
 gunicorn==21.2.0
+
 
