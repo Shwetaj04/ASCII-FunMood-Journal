@@ -1,0 +1,25 @@
+{
+  "happy": [
+    { "ascii": "(｡◕‿◕｡)✨", "affirmation": "Your smile glitches the universe in the best way 🌸" },
+    { "ascii": "ʘ‿ʘ", "affirmation": "Happiness level: OVER 9000 ⚡🤗" },
+    {"ascii": "(✿◠‿◠)","affirmation": "Keep shining — your smile makes a difference!💕"},
+    {"ascii": "ヽ(•‿•)ノ","affirmation": "Happiness looks amazing on you — stay joyful!🌷"}
+  ],
+  "angry": [
+    { "ascii": "(╯°□°)╯︵ ┻━┻", "affirmation": "Flip tables, not your sanity 💥" },
+    { "ascii": "(-_-;)", "affirmation": "Chaos is loud, but you’re louder 🔊" },
+    {"ascii": "(>_<)","affirmation": "Pause, stretch, and calm yourself — you can do it.🫂"}
+  ],
+  "lonely": [
+    { "ascii": "(っ◞‸◟c)", "affirmation": "You’re not alone. Even ASCII cares 💻❤️" },
+    { "ascii": "(｡•́︿•̀｡)", "affirmation": "Lonely? Nah, you’ve got a digital buddy now 🤖" }
+  ],
+  "sad": [
+    {"ascii": "(っ˘̩╭╮˘̩)っ","affirmation": "It’s okay to feel down — brighter days are coming 🌤️"},
+    {"ascii": "(︶︹︺)","affirmation": "Don't worry even clouds can’t hide your light for long ☁️✨"}
+  ],
+  "tired": [
+    { "ascii": "(－‸ლ)", "affirmation": "Nap hard. Rise harder 🌙⚡" },
+    { "ascii": "(⇀‸↼‶)", "affirmation": "Even glitches need rest. Recharge 🔋" }
+  ]
+}

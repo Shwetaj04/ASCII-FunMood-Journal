@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII FUNMood Journal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='basics.css') }}">
+    <style>
+        body{
+            margin: 0;
+            font-family:'Poppins', sans-serif;
+            overflow-x: hidden;
+            background-color: #fff;
+            height: 100vh;
+            width: 100vw;
+        }
+        .bg-circles{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width:100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .circle{
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.6;
+            aspect-ratio: 1/1; 
+        }
+        .c1 { width: 300px; height: 300px; background: #FFB6C1; top: 10%; left: 20%; }
+        .c2 { width: 250px; height: 250px; background: #C1FFC1; top: 40%; left: 60%; }
+        .c3 { width: 200px; height: 200px; background: #E0FFFF; top: 70%; left: 30%; }
+        .c4 { width: 350px; height: 350px; background: #FFDEE9; top: 20%; left: 75%; }
+        .c5 { width: 150px; height: 150px; background: #F0FFF0; top: 80%; left: 10%; }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        button {
+            background: #6cd48f;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover { background: #57b677; }
+        pre {
+            text-align: left;
+            white-space: pre-wrap;
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-family: monospace;
+            color: #333;
+        }
+        #meme-card {
+            max-width: 300px;
+            margin: 20px auto 0;
+            display: none;
+        }
+        #meme-card.show { display: block; }
+        #meme-card img { width: 100%; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="bg-circles" aria-hidden="true">
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+    <div class="circle c3"></div>
+    <div class="circle c4"></div>
+    <div class="circle c5"></div>
+</div>
+
+<main class="page">
+    <section class="card">
+        <h1>ASCII FUNMood Journal</h1>
+
+        <!-- ASCII form -->
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/*" required/>
+            <button type="submit">Convert to ASCII</button>
+        </form>
+
+        <pre id="ascii-art"></pre>
+        <hr style="margin: 20px 0; border: none; border-top: 2px dashed #ccc;">
+        
+
+        <!-- Mood form -->
+        <h2>🪞 Write Your Current Mood</h2>
+        <p>How are you feeling right now? Write it out — and your journal will reflect it!</p>
+        <p>sad/happy/lonely/tired/angry — Jot it down!</p>
+
+        <form id="mood-form">
+            <textarea id="mood-input" rows="4" placeholder="Type your mood here..."></textarea><br>
+            <button type="submit">Save Mood</button>
+        </form>
+
+        <div id="mood-response"></div>
+        <div id="doodle" style="font-size: 1.5rem; margin-top: 10px;"></div>
+        <p id="affirmation"></p>
+        <p id="mood-display"></p>
+
+        <div id="meme-card">
+            <img id="meme-image" src="" alt="Mood Meme">
+        </div>
+        
+    </section>
+</main>
+<!-- Floating helper widget -->
+<div id="helper-widget">
+    <div id="helper-icon">💡</div>
+    <div id="helper-content">
+        <p><a href="https://www.google.com/" target="_blank">>>No image to convert into Ascii?Get one on Google</a></p>
+        <p><a href="https://www.google.com/search?q=memes&tbm=isch" target="_blank">>>Explore memes</a></p>
+        <hr>
+        <p>Made in India with ❤️+🧠 </p>
+    </div>
+</div>
+
+
+<script>
+const form = document.getElementById('upload-form');
+const asciiArt = document.getElementById('ascii-art');
+const moodInput = document.getElementById('mood-input');
+const moodForm = document.getElementById('mood-form');
+const moodResponse = document.getElementById('mood-response');
+const affirmation = document.getElementById('affirmation');
+const memeCard = document.getElementById('meme-card');
+const memeImage = document.getElementById('meme-image');
+const moodDisplay = document.getElementById('mood-display');
+
+const moodMemes = {
+    happy: '/static/images/happy.jpeg',
+    lonely:'/static/images/lonely.jpeg',
+    sad: '/static/images/sad.jpeg',
+    angry: '/static/images/angry.jpeg',
+    tired: '/static/images/tired.jpeg'
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+        const helperIcon = document.getElementById('helper-icon');
+        const helperContent = document.getElementById('helper-content');
+
+        helperIcon.addEventListener('click', () => {
+            helperContent.classList.toggle('show');
+        });
+    });
+
+// ASCII conversion
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    asciiArt.textContent = "Processing...";
+
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch('/convert', { method: 'POST', body: formData });
+        const data = await response.json();
+        asciiArt.textContent = data.ascii_art || "No ASCII returned";
+        // Only show affirmation if user typed a mood
+        affirmation.textContent = moodInput.value.trim() ? data.affirmation || "" : "";
+    } catch (err) {
+        console.error(err);
+        asciiArt.textContent = "Something went wrong!";
+    }
+});
+
+// Mood form
+moodForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const moodValue = moodInput.value.trim();
+
+    if (!moodValue) {
+        moodDisplay.textContent = "";
+        affirmation.textContent = "";
+        moodResponse.textContent = "";
+        showMoodMeme("");
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('mood', moodValue);
+
+        const response = await fetch('/mood', { method: 'POST', body: formData });
+        const data = await response.json();
+
+        moodDisplay.textContent = moodValue;
+        moodResponse.textContent = `Mood detected: ${data.mood || moodValue}`;
+        affirmation.textContent = data.affirmation || "Stay positive!";
+        showMoodMeme(moodValue);
+    } catch (err) {
+        console.error(err);
+        moodResponse.textContent = "Error saving mood.";
+        showMoodMeme("");
+    }
+});
+
+// Show meme
+function showMoodMeme(mood) {
+    const lowerMood = mood.toLowerCase();
+    if (moodMemes[lowerMood]) {
+        memeImage.src = moodMemes[lowerMood];
+        memeCard.classList.add('show');
+        memeCard.style.display = 'block';
+    } else {
+        memeCard.classList.remove('show');
+        memeCard.style.display = 'none';
+        memeImage.src = "";
+    }
+}
+</script>
+
+</body>
+</html>

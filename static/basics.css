@@ -1,0 +1,246 @@
+/* ===================== */
+/* 🌈 Animated pastel gradient background */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  background: linear-gradient(120deg, #ffc8e7, #ddf3f3, #f0fff0, #fff0f5);
+  background-size: 400% 400%;
+  animation: gradientShift 25s ease infinite; /* slower for calmer effect */
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ✨ Gentle moving gradient animation */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===================== */
+/* 🫧 Floating blurred circles layer */
+.bg-circles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* Circle floating animation */
+@keyframes float-circle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-40px); }
+}
+
+/* Pastel color bubbles */
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.6;
+  aspect-ratio: 1/1;
+  animation: float-circle 8s ease-in-out infinite;
+}
+
+/* Circle placements and animation delays */
+.c1 { width: 300px; height: 300px; background: #ca858f; top: 10%; left: 20%; animation-delay: 0s; }
+.c2 { width: 250px; height: 250px; background: #a1f8a1; top: 40%; left: 60%; animation-delay: 2s; }
+.c3 { width: 200px; height: 200px; background: #93ffff; top: 70%; left: 30%; animation-delay: 4s; }
+.c4 { width: 350px; height: 350px; background: #FFDEE9; top: 20%; left: 75%; animation-delay: 6s; }
+.c5 { width: 150px; height: 150px; background: #baffba; top: 80%; left: 10%; animation-delay: 1s; }
+
+/* ===================== */
+/* Foreground content */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.card {
+  background: rgba(251, 199, 199, 0.8);
+  backdrop-filter: blur(12px);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  width: 90%;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column; /* stack elements vertically */
+  align-items: center;    /* horizontal center */
+  justify-content: center; /* vertical center if card height allows */
+  text-align: center;
+}
+
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 40px rgba(0,0,0,0.15);
+}
+
+/* ===================== */
+/* Buttons */
+button {
+  background: #6cd48f;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #57b677;
+}
+
+/* ===================== */
+/* Doodle box */
+#doodle {
+  background: rgba(227, 167, 187, 0.5);
+  border-radius: 10px;
+  padding: 10px;
+  display: inline-block;
+  font-size: 1.5rem;
+  font-family: "Courier New", monospace;
+  margin-top: 10px;
+}
+
+/* Doodle floating animation */
+@keyframes float-doodle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+#doodle {
+  animation: float-doodle 2s ease-in-out infinite;
+}
+
+/* ===================== */
+/* ASCII output area */
+pre {
+  text-align: left;
+  white-space: pre;
+  background: #f8f8f8;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 15px;
+  font-family: 'Courier New', 'Noto Sans Mono', 'Noto Color Emoji', monospace;
+  color: #333;
+  max-width: 100%;
+  max-height: 400px;
+  overflow: auto;        /* scroll if too big */
+  word-wrap: normal;
+  word-break: break-word;
+  font-size: 8px;
+  line-height: 9px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+
+#meme-card {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 250px;
+  text-align: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+#meme-card img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+.show {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* Helper Widget Styles */
+#helper-widget {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999;
+    font-family: 'Poppins', sans-serif;
+}
+
+#helper-icon {
+    background-color: #6cd48f;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: background 0.3s, transform 0.3s;
+}
+
+#helper-icon:hover {
+    background-color: #57b677;
+    transform: scale(1.1);
+}
+
+#helper-content {
+    position: absolute;
+    right: 60px;
+    bottom: 0;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    width: 220px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 0.9rem;
+    text-align: left;
+    
+    /* Start hidden */
+    opacity: 0;
+    transform: translateX(20px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+#helper-content.show {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+#helper-content p {
+    margin: 8px 0;
+}
+
+#helper-content a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+#helper-content a:hover {
+    text-decoration: underline;
+}
+
