@@ -22,10 +22,16 @@ def index():
 
 ASCII_CHARS=["@","#","S","%","?","*","+",";",":",",","."]
 def resize_image(image, new_width=80):
-      width,height= image.size
-      ratio=height/width
-      new_height=int(new_width*ratio*0.55)
-      return image.resize((new_width,new_height))
+    width, height = image.size
+    ratio = height / width
+    new_height = int(new_width * ratio * 0.55)
+    # cap max height/width to save memory
+    if new_height > 600:
+        new_height = 600
+    if new_width > 800:
+        new_width = 800
+    return image.resize((new_width, new_height))
+      
 
 def grayify(image):
     return image.convert("L")
@@ -98,6 +104,10 @@ def convert():
         # convert image to ascii (wrap in try/except to catch PIL errors)
         try:
             ascii_art = image_to_ascii(filepath)
+            del ascii_art
+            import gc
+            gc.collect()
+
         except UnidentifiedImageError:
             return jsonify({"error": "Pillow cannot identify this image (corrupt/unsupported). Try a different file."}), 400
         except Exception as e:
@@ -147,12 +157,6 @@ def mood_entry():
     # invalid or empty mood → return empty JSON
     return jsonify({}), 200
     
-
-if __name__ =='__main__':
-    app.run(debug=True)
-
-
-
 @app.route('/check-static-images')
 def check_static_images():
     images_folder = os.path.join(app.static_folder, 'images')
@@ -162,3 +166,8 @@ def check_static_images():
     files = os.listdir(images_folder)
     files_list = "<br>".join(files)
     return f"Files in static/images/:<br>{files_list}"
+
+if __name__ == '__main__':
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False, threaded=False)
