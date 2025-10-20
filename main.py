@@ -70,6 +70,7 @@ def allowed_file(filename):
 
 @app.route('/convert', methods=['POST'])
 def convert():
+    ascii_art = None
     try:
         file = request.files.get('image')
         user_mood = request.form.get('mood', '').lower()
@@ -104,9 +105,7 @@ def convert():
         # convert image to ascii (wrap in try/except to catch PIL errors)
         try:
             ascii_art = image_to_ascii(filepath)
-            del ascii_art
-            import gc
-            gc.collect()
+            
 
         except UnidentifiedImageError:
             return jsonify({"error": "Pillow cannot identify this image (corrupt/unsupported). Try a different file."}), 400
@@ -171,3 +170,4 @@ if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False, threaded=False)
+
