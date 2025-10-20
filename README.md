@@ -12,3 +12,5 @@ Journaling is an art, which people use to express their daily emotional snapshot
   - Converts images into ASCII art using pixel brightness mapping  
   - Maps user's mood to soothing reflective sentences  
   - Displays a funny meme based on mood  
+##Link
+https://ascii-funmood-journal-production-cbac.up.railway.app/
